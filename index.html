@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persian Speech Synthesis & G2P Research Showcase | Soroush Soleimani & Melika Parhiz</title>
+  <meta name="description" content="Research outcomes, interactive audio samples, Kaggle notebooks, and GitHub repositories for Persian and English Text-to-Speech (TTS) and Grapheme-to-Phoneme (G2P) modeling by Soroush Soleimani and Melika Parhiz.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-subtle: #eff6ff;
+      --success: #059669;
+      --success-subtle: #ecfdf5;
+      --danger: #dc2626;
+      --danger-subtle: #fef2f2;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+      --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header & Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-main);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-brand span.badge-logo {
+      background: var(--text-main);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 3px 7px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 80px 0 50px 0;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg-alt) 100%);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-subtle);
+      color: var(--accent);
+      border: 1px solid #dbeafe;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+
+    .hero p.lead {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 32px auto;
+      font-weight: 400;
+      line-height: 1.65;
+    }
+
+    .author-chips {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .author-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      box-shadow: var(--shadow-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .author-chip .avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .author-chip a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: color 0.15s;
+    }
+
+    .author-chip a:hover {
+      color: var(--accent);
+    }
+
+    /* Quick Filter / Navigation Pills */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      padding: 24px 0;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    .filter-btn {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--text-main);
+      color: #ffffff;
+      border-color: var(--text-main);
+    }
+
+    /* Section Styling */
+    section {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section-header {
+      margin-bottom: 28px;
+    }
+
+    .section-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 750;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 800px;
+    }
+
+    /* Project Cards */
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 36px;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-focus);
+      box-shadow: var(--shadow);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .card-title-wrap h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .card-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-author {
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .action-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .btn-github {
+      background: #181717;
+      color: #ffffff;
+      border: 1px solid #181717;
+    }
+
+    .btn-github:hover {
+      background: #2f2e2e;
+    }
+
+    .btn-kaggle {
+      background: #20beff;
+      color: #ffffff;
+      border: 1px solid #17a4dd;
+    }
+
+    .btn-kaggle:hover {
+      background: #0ea5e9;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-alt);
+      border-color: var(--border-focus);
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .card-desc {
+      color: #334155;
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      line-height: 1.65;
+    }
+
+    /* Key highlights grid */
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .highlight-item {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+
+    .highlight-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .highlight-value {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Audio Comparison Module */
+    .audio-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .audio-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .audio-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .audio-tag {
+      font-size: 0.74rem;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .audio-tag-success {
+      background: var(--success-subtle);
+      color: var(--success);
+      border: 1px solid #bbf7d0;
+    }
+
+    .audio-tag-danger {
+      background: var(--danger-subtle);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .audio-tag-accent {
+      background: var(--accent-subtle);
+      color: var(--accent);
+      border: 1px solid #bfdbfe;
+    }
+
+    .audio-pair-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 680px) {
+      .audio-pair-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .audio-channel-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .channel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .channel-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .channel-name.before {
+      color: var(--danger);
+    }
+
+    .channel-name.after {
+      color: var(--success);
+    }
+
+    .ipa-badge {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #475569;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    /* Custom Minimal Audio Controls */
+    .player-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .play-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: var(--text-main);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .play-btn:hover {
+      background: #334155;
+      transform: scale(1.04);
+    }
+
+    .play-btn:active {
+      transform: scale(0.96);
+    }
+
+    .play-btn.playing {
+      background: var(--accent);
+    }
+
+    .play-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .progress-bar-wrap {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--text-main);
+      border-radius: 9999px;
+      transition: width 0.08s linear;
+    }
+
+    .playing-bar .progress-fill {
+      background: var(--accent);
+    }
+
+    .time-indicators {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--text-light);
+      font-family: var(--font-mono);
+    }
+
+    /* Single Player Card */
+    .single-player-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+    }
+
+    /* Architecture Preview Section */
+    .arch-preview {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .arch-preview img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .arch-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 60px 0 40px 0;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h4 {
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-col a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-col a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+
+    /* Code & Metrics Pill */
+    .metric-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* Smooth anchor behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="container nav-container">
+      <a href="#" class="nav-brand">
+        <span class="badge-logo">TTS & G2P</span>
+        <span>Speech Synthesis Lab</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#projects">Projects</a>
+        <a href="#audio-samples">Audio Samples</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#authors">Researchers</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+        Open-Source Research & Reproducible Audio Demos
+      </div>
+      <h1>Persian & English Neural Speech Synthesis & G2P</h1>
+      <p class="lead">
+        A clean, unified repository of state-of-the-art Text-to-Speech (TTS), non-autoregressive Flow Matching (F5-TTS), and Byte-Level Grapheme-to-Phoneme (ByT5 / VITS) models developed and fine-tuned by <strong>Soroush Soleimani</strong> and <strong>Melika Parhiz</strong>.
+      </p>
+      
+      <!-- Researcher Chips -->
+      <div class="author-chips">
+        <div class="author-chip">
+          <div class="avatar">SS</div>
+          <span>Soroush Soleimani</span>
+          <span>&middot;</span>
+          <a href="https://github.com/SoroushSoleimani" target="_blank" rel="noopener">GitHub</a>
+          <span>&middot;</span>
+          <a href="https://www.kaggle.com/soroushsoleimani" target="_blank" rel="noopener">Kaggle</a>
+        </div>
+        <div class="author-chip">
+          <div class="avatar">MP</div>
+          <span>Melika Parhiz</span>
+          <span>&middot;</span>
+          <a href="https://github.com/melolikepz" target="_blank" rel="noopener">GitHub</a>
+          <span>&middot;</span>
+          <a href="https://www.kaggle.com/melikaparhiz" target="_blank" rel="noopener">Kaggle</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- Quick Jump Filter Bar -->
+    <div class="filter-bar">
+      <a href="#proj-f5" class="filter-btn">F5-TTS Architecture & Fine-tuning</a>
+      <a href="#proj-byt5" class="filter-btn">ByT5 Persian G2P Adaptation</a>
+      <a href="#proj-vits-persian" class="filter-btn">Persian G2P-VITS (ManaTTS)</a>
+      <a href="#proj-vits-en" class="filter-btn">English VITS Engine</a>
+    </div>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects">
+      <div class="section-header">
+        <div class="section-eyebrow">Research Contributions</div>
+        <h2 class="section-title">Core Projects & Implementations</h2>
+        <p class="section-subtitle">
+          Interactive evaluation, benchmark metrics, reproducible Kaggle GPU notebooks, and open-source source code repositories.
+        </p>
+      </div>
+
+      <!-- PROJECT 1: ByT5 Persian G2P (Soroush Soleimani) -->
+      <article id="proj-byt5" class="project-card">
+        <div class="card-top">
+          <div class="card-title-wrap">
+            <h3>1. Large-Scale Persian G2P via ByT5 Fine-Tuning</h3>
+            <div class="card-meta">
+              <span class="badge-author">Soroush Soleimani</span>
+              <span>&bull; Byte-Level Seq2Seq</span>
+              <span>&bull; 116K+ KaamelDict Corpus</span>
+            </div>
+          </div>
+          <div class="action-links">
+            <a href="https://github.com/SoroushSoleimani/g2p-byt5-minifinetune" class="btn btn-github" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub Repository
+            </a>
+            <a href="https://www.kaggle.com/code/soroushsoleimani/g2p-implementation-and-mini-finetune-byt5" class="btn btn-kaggle" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.081c-.235 0-.352-.117-.352-.352V.352c0-.235.117-.352.352-.352h2.855c.234 0 .351.117.351.352v14.472l6.233-6.505c.14-.141.293-.211.457-.211h3.35c.14 0 .234.059.281.176.047.14.012.246-.105.316l-6.843 6.843 7.03 8.085c.117.117.129.223.035.331z"/></svg>
+              Kaggle Notebook
+            </a>
+          </div>
+        </div>
+
+        <p class="card-desc">
+          Persian is written in an abjad script that omits short vowels (<code>/æ/</code>, <code>/e/</code>, <code>/o/</code>), the grammatical <em>Ezafe</em> enclitic (<code>/-e/</code>, <code>/-je/</code>), and consonant gemination (<em>tashdid</em>). This project fine-tunes a byte-level encoder-decoder transformer (<strong>ByT5</strong>) on <strong>115,221</strong> instances compiled from the authoritative <strong>KaamelDict</strong> corpus. By processing raw UTF-8 bytes without subword tokenization, the model eliminates out-of-vocabulary failures and dramatically improves Persian pronunciation accuracy in downstream TTS engines.
+        </p>
+
+        <!-- Highlights Grid -->
+        <div class="highlights-grid">
+          <div class="highlight-item">
+            <div class="highlight-title">Training Scale</div>
+            <div class="highlight-value">115,221 Instances (KaamelDict)</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Wiktionary PER Reduction</div>
+            <div class="highlight-value text-success">11.66% &rarr; 3.49% (-70.1%)</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Challenge Suite Accuracy</div>
+            <div class="highlight-value text-success">86.7% Exact Word Match</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Hardware & Speed</div>
+            <div class="highlight-value">Tesla T4 GPU &bull; 9.64 min run</div>
+          </div>
+        </div>
+
+        <!-- Audio Comparison Player -->
+        <div class="audio-box">
+          <div class="audio-box-header">
+            <div>
+              <span class="audio-title">Interactive Before vs. After Fine-Tuning Comparison</span>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+                Synthesized using neural TTS driven directly by the predicted IPA phoneme sequences.
+              </p>
+            </div>
+            <span class="metric-badge">Sentence 1 Test Sample</span>
+          </div>
+
+          <div class="audio-pair-grid">
+            <!-- Channel 1: Before -->
+            <div class="audio-channel-card">
+              <div class="channel-header">
+                <span class="channel-name before">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                  Before Fine-Tuning (Pretrained Baseline)
+                </span>
+                <span class="audio-tag audio-tag-danger">Baseline ByT5</span>
+              </div>
+              <p style="font-size: 0.8rem; color: #475569;">
+                Persian: <em>یادگیری ماشین شاخه‌ای از هوش مصنوعی است...</em>
+              </p>
+              <div class="player-row">
+                <button class="play-btn" data-audio="audio/sentence1_before_finetune.wav" title="Play Before Fine-Tune">
+                  <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="progress-bar-wrap">
+                  <div class="progress-track">
+                    <div class="progress-fill"></div>
+                  </div>
+                  <div class="time-indicators">
+                    <span class="time-curr">0:00</span>
+                    <span class="time-dur">0:06</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Channel 2: After -->
+            <div class="audio-channel-card">
+              <div class="channel-header">
+                <span class="channel-name after">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                  After Fine-Tuning (Our Persian Model)
+                </span>
+                <span class="audio-tag audio-tag-success">Fine-Tuned Kaamel</span>
+              </div>
+              <p style="font-size: 0.8rem; color: #475569;">
+                Accurate Ezafe connectors and short-vowel restoration.
+              </p>
+              <div class="player-row">
+                <button class="play-btn" data-audio="audio/sentence1_after_finetune.wav" title="Play After Fine-Tune">
+                  <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="progress-bar-wrap">
+                  <div class="progress-track">
+                    <div class="progress-fill"></div>
+                  </div>
+                  <div class="time-indicators">
+                    <span class="time-curr">0:00</span>
+                    <span class="time-dur">0:06</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Second Audio Pair: Held-out Compound & Ezafe Word -->
+          <div style="margin-top: 14px;">
+            <div class="channel-header" style="margin-bottom: 8px;">
+              <span style="font-size: 0.84rem; font-weight: 600; color: var(--text-main);">
+                Compound &amp; Ezafe Word Test: <span class="ipa-badge">مدل آماری</span> &rarr; Target: <code>/modeleɒːmɒːɾiː/</code>
+              </span>
+            </div>
+            <div class="audio-pair-grid">
+              <div class="audio-channel-card">
+                <div class="channel-header">
+                  <span class="channel-name before">Baseline Prediction (/mædælɒːmɒːɾiː/)</span>
+                  <span class="audio-tag audio-tag-danger">3 Errors</span>
+                </div>
+                <div class="player-row">
+                  <button class="play-btn" data-audio="audio/modele_amari_before_finetune.wav" title="Play Baseline Word">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
+                  <div class="progress-bar-wrap">
+                    <div class="progress-track">
+                      <div class="progress-fill"></div>
+                    </div>
+                    <div class="time-indicators">
+                      <span class="time-curr">0:00</span>
+                      <span class="time-dur">0:02</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="audio-channel-card">
+                <div class="channel-header">
+                  <span class="channel-name after">Fine-Tuned Prediction (/modeleɒːmɒːɾiː/)</span>
+                  <span class="audio-tag audio-tag-success">Exact Match</span>
+                </div>
+                <div class="player-row">
+                  <button class="play-btn" data-audio="audio/modele_amari_after_finetune.wav" title="Play Fine-Tuned Word">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
+                  <div class="progress-bar-wrap">
+                    <div class="progress-track">
+                      <div class="progress-fill"></div>
+                    </div>
+                    <div class="time-indicators">
+                      <span class="time-curr">0:00</span>
+                      <span class="time-dur">0:02</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </article>
+
+      <!-- PROJECT 2: Persian G2P VITS (Melika Parhiz) -->
+      <article id="proj-vits-persian" class="project-card">
+        <div class="card-top">
+          <div class="card-title-wrap">
+            <h3>2. End-to-End Persian G2P with VITS TTS</h3>
+            <div class="card-meta">
+              <span class="badge-author">Melika Parhiz</span>
+              <span>&bull; Coqui VITS Architecture</span>
+              <span>&bull; ManaTTS Corpus (114h)</span>
+            </div>
+          </div>
+          <div class="action-links">
+            <a href="https://github.com/melolikepz/persian-g2p-vits" class="btn btn-github" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub Repository
+            </a>
+            <a href="https://www.kaggle.com/code/melikaparhiz/persian-g2p-vits-kaggle" class="btn btn-kaggle" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.081c-.235 0-.352-.117-.352-.352V.352c0-.235.117-.352.352-.352h2.855c.234 0 .351.117.351.352v14.472l6.233-6.505c.14-.141.293-.211.457-.211h3.35c.14 0 .234.059.281.176.047.14.012.246-.105.316l-6.843 6.843 7.03 8.085c.117.117.129.223.035.331z"/></svg>
+              Kaggle Notebook
+            </a>
+          </div>
+        </div>
+
+        <p class="card-desc">
+          A complete, train-from-scratch single-speaker Persian TTS system utilizing the <strong>Coqui VITS</strong> framework with an explicit, mandatory G2P front-end. Persian text is converted to strict phoneme sequences via <code>Homo-GE2PE-Persian</code>, eliminating ambiguous graphemic pronunciations before entering the VITS text encoder. The model is trained on the high-quality 114-hour <strong>ManaTTS</strong> corpus, producing natural rhythm and fluent intonation.
+        </p>
+
+        <!-- Highlights Grid -->
+        <div class="highlights-grid">
+          <div class="highlight-item">
+            <div class="highlight-title">Pipeline Architecture</div>
+            <div class="highlight-value">Text &rarr; Homo-GE2PE &rarr; VITS &rarr; Waveform</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Speech Corpus</div>
+            <div class="highlight-value">ManaTTS (114-Hour Single Speaker)</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Phoneme Alignment</div>
+            <div class="highlight-value">Explicit Pre-phonemization (No MMS drift)</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Execution Environment</div>
+            <div class="highlight-value">Kaggle GPU &amp; Coqui VITS Engine</div>
+          </div>
+        </div>
+
+        <!-- Single Audio Player for Kaggle Sample -->
+        <div class="audio-box">
+          <div class="audio-box-header">
+            <div>
+              <span class="audio-title">Persian VITS Synthesis Output</span>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+                Direct waveform generation from trained checkpoint (<code>kaggle_sample.wav</code>).
+              </p>
+            </div>
+            <span class="audio-tag audio-tag-accent">Kaggle Audio Output</span>
+          </div>
+          
+          <div class="single-player-card">
+            <div class="player-row">
+              <button class="play-btn" data-audio="audio/kaggle_sample.wav" title="Play Persian VITS Output">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <div class="progress-bar-wrap">
+                <div class="progress-track">
+                  <div class="progress-fill"></div>
+                </div>
+                <div class="time-indicators">
+                  <span class="time-curr">0:00</span>
+                  <span class="time-dur">0:02</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 3: F5-TTS Flow Matching (Soroush Soleimani) -->
+      <article id="proj-f5" class="project-card">
+        <div class="card-top">
+          <div class="card-title-wrap">
+            <h3>3. F5-TTS Architecture Analysis &amp; Flow-Matching Fine-Tuning</h3>
+            <div class="card-meta">
+              <span class="badge-author">Soroush Soleimani</span>
+              <span>&bull; Non-Autoregressive Flow Matching</span>
+              <span>&bull; Diffusion Transformer (DiT)</span>
+            </div>
+          </div>
+          <div class="action-links">
+            <a href="https://www.kaggle.com/code/soroushsoleimani/f5-tts-architecture-complete-explanation" class="btn btn-kaggle" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.081c-.235 0-.352-.117-.352-.352V.352c0-.235.117-.352.352-.352h2.855c.234 0 .351.117.351.352v14.472l6.233-6.505c.14-.141.293-.211.457-.211h3.35c.14 0 .234.059.281.176.047.14.012.246-.105.316l-6.843 6.843 7.03 8.085c.117.117.129.223.035.331z"/></svg>
+              Architecture Explanation
+            </a>
+            <a href="https://www.kaggle.com/code/soroushsoleimani/fine-tuning-f5-tts" class="btn btn-kaggle" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.081c-.235 0-.352-.117-.352-.352V.352c0-.235.117-.352.352-.352h2.855c.234 0 .351.117.351.352v14.472l6.233-6.505c.14-.141.293-.211.457-.211h3.35c.14 0 .234.059.281.176.047.14.012.246-.105.316l-6.843 6.843 7.03 8.085c.117.117.129.223.035.331z"/></svg>
+              Fine-Tuning Notebook
+            </a>
+          </div>
+        </div>
+
+        <p class="card-desc">
+          An exhaustive mathematical and implementation study of <strong>F5-TTS</strong>, the pioneering non-autoregressive speech synthesis architecture based on <strong>Conditional Flow Matching (CFM)</strong> and a <strong>Diffusion Transformer (DiT)</strong> backbone with ConvNeXt-V2 text refinement. The project details how F5-TTS eliminates duration predictors and complex phoneme aligners through continuous-time vector field modeling, paired with end-to-end fine-tuning workflows on Kaggle GPU for zero-shot voice cloning.
+        </p>
+
+        <!-- Highlights Grid -->
+        <div class="highlights-grid">
+          <div class="highlight-item">
+            <div class="highlight-title">Acoustic Paradigm</div>
+            <div class="highlight-value">Non-Autoregressive Flow Matching</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Core Backbone</div>
+            <div class="highlight-value">DiT + ConvNeXt-V2 Embeddings</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Alignment Strategy</div>
+            <div class="highlight-value">Duration-Predictor-Free (Infilling)</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Voice Cloning</div>
+            <div class="highlight-value">Zero-Shot Reference Audio Infilling</div>
+          </div>
+        </div>
+
+        <!-- Sample synthesis player -->
+        <div class="audio-box">
+          <div class="audio-box-header">
+            <div>
+              <span class="audio-title">High-MOS Studio Neural Synthesis Reference</span>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+                High-fidelity zero-shot acoustic waveform demonstration.
+              </p>
+            </div>
+            <span class="audio-tag audio-tag-success">Studio Benchmark</span>
+          </div>
+          <div class="single-player-card">
+            <div class="player-row">
+              <button class="play-btn" data-audio="audio/sentence1_vits_high_mos.wav" title="Play Studio TTS Audio">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <div class="progress-bar-wrap">
+                <div class="progress-track">
+                  <div class="progress-fill"></div>
+                </div>
+                <div class="time-indicators">
+                  <span class="time-curr">0:00</span>
+                  <span class="time-dur">0:05</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 4: English VITS Engine (Melika Parhiz) -->
+      <article id="proj-vits-en" class="project-card">
+        <div class="card-top">
+          <div class="card-title-wrap">
+            <h3>4. English TTS Engine with VITS Architecture</h3>
+            <div class="card-meta">
+              <span class="badge-author">Melika Parhiz</span>
+              <span>&bull; VITS Implementation</span>
+              <span>&bull; LJSpeech-1.1 Benchmark</span>
+            </div>
+          </div>
+          <div class="action-links">
+            <a href="https://github.com/melolikepz/English-TTS" class="btn btn-github" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub Repository
+            </a>
+          </div>
+        </div>
+
+        <p class="card-desc">
+          A local training and synthesis pipeline implementing the original <strong>VITS</strong> architecture (Variational Inference with adversarial learning for end-to-end Text-to-Speech). Features a Transformer text encoder, normalizing flows, variational posterior encoder, stochastic duration predictor, and multi-period discriminators trained on mono PCM16 22,050 Hz <strong>LJSpeech-1.1</strong> data. Includes clean checkpoint resumption, Monotonic Alignment Search (MAS), and unit test validation suites.
+        </p>
+
+        <!-- Highlights Grid -->
+        <div class="highlights-grid">
+          <div class="highlight-item">
+            <div class="highlight-title">Architecture</div>
+            <div class="highlight-value">End-to-End VITS (No Griffin-Lim)</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Benchmark Dataset</div>
+            <div class="highlight-value">LJSpeech-1.1 (13,100 Utterances)</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Alignment Algorithm</div>
+            <div class="highlight-value">Monotonic Alignment Search (MAS)</div>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-title">Notebook Pipeline</div>
+            <div class="highlight-value"><code>VITS_Local.ipynb</code></div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ARCHITECTURE DIAGRAM SECTION -->
+    <section id="architecture">
+      <div class="section-header">
+        <div class="section-eyebrow">System Architecture</div>
+        <h2 class="section-title">Byte-Level Modeling &amp; Acoustic Synthesis Pipeline</h2>
+        <p class="section-subtitle">
+          Detailed schematic of the Persian G2P ByT5 transformer connected with neural vocoders and VITS acoustic engines.
+        </p>
+      </div>
+
+      <div class="arch-preview">
+        <img src="assets/persian_tts_g2p_architecture.png" alt="Persian TTS and G2P Architecture Diagram" loading="lazy">
+        <p class="arch-caption">
+          Figure 1: Full end-to-end pipeline &mdash; Persian Orthography &rarr; UTF-8 Byte Encoder &rarr; 16-Layer Transformer &rarr; IPA Phonemic Sequence &rarr; Acoustic Mel-Model &rarr; High-Fidelity Waveform.
+        </p>
+      </div>
+    </section>
+
+    <!-- AUTHORS / RESEARCHERS SECTION -->
+    <section id="authors">
+      <div class="section-header">
+        <div class="section-eyebrow">Meet The Authors</div>
+        <h2 class="section-title">Researchers &amp; Engineers</h2>
+      </div>
+
+      <div class="highlights-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+        <div class="project-card" style="margin-bottom: 0;">
+          <div class="card-meta" style="margin-bottom: 12px;">
+            <div class="avatar" style="width: 44px; height: 44px; font-size: 1.1rem; border-radius: 50%; background: #0f172a; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">SS</div>
+            <div>
+              <h4 style="font-size: 1.15rem; color: var(--text-main);">Soroush Soleimani</h4>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">AI &amp; Speech Processing Researcher</p>
+            </div>
+          </div>
+          <p style="font-size: 0.88rem; color: #475569; margin-bottom: 16px;">
+            Focusing on Persian Grapheme-to-Phoneme (G2P) sequence modeling, domain adaptation on ByT5, non-autoregressive Flow Matching (F5-TTS), and high-MOS studio neural synthesis pipelines.
+          </p>
+          <div class="action-links">
+            <a href="https://github.com/SoroushSoleimani" class="btn btn-outline" target="_blank" rel="noopener">GitHub Profile</a>
+            <a href="https://www.kaggle.com/soroushsoleimani" class="btn btn-outline" target="_blank" rel="noopener">Kaggle Profile</a>
+          </div>
+        </div>
+
+        <div class="project-card" style="margin-bottom: 0;">
+          <div class="card-meta" style="margin-bottom: 12px;">
+            <div class="avatar" style="width: 44px; height: 44px; font-size: 1.1rem; border-radius: 50%; background: #4f46e5; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">MP</div>
+            <div>
+              <h4 style="font-size: 1.15rem; color: var(--text-main);">Melika Parhiz</h4>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Deep Learning &amp; Audio Synthesis Engineer</p>
+            </div>
+          </div>
+          <p style="font-size: 0.88rem; color: #475569; margin-bottom: 16px;">
+            Specializing in end-to-end VITS acoustic architectures, Persian speech dataset curation (ManaTTS), explicit phonemizer pipelines, and local neural speech modeling.
+          </p>
+          <div class="action-links">
+            <a href="https://github.com/melolikepz" class="btn btn-outline" target="_blank" rel="noopener">GitHub Profile</a>
+            <a href="https://www.kaggle.com/melikaparhiz" class="btn btn-outline" target="_blank" rel="noopener">Kaggle Profile</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-col" style="max-width: 380px;">
+          <h4>Persian Speech &amp; G2P Lab</h4>
+          <p style="font-size: 0.85rem; line-height: 1.6; color: var(--text-muted);">
+            An open academic showcase dedicated to high-fidelity Persian phonology conversion and neural speech synthesis using modern deep learning architectures.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Repositories</h4>
+          <ul>
+            <li><a href="https://github.com/SoroushSoleimani/g2p-byt5-minifinetune" target="_blank" rel="noopener">g2p-byt5-minifinetune</a></li>
+            <li><a href="https://github.com/melolikepz/persian-g2p-vits" target="_blank" rel="noopener">persian-g2p-vits</a></li>
+            <li><a href="https://github.com/melolikepz/English-TTS" target="_blank" rel="noopener">English-TTS</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Kaggle Notebooks</h4>
+          <ul>
+            <li><a href="https://www.kaggle.com/code/soroushsoleimani/g2p-implementation-and-mini-finetune-byt5" target="_blank" rel="noopener">ByT5 Persian G2P Adaptation</a></li>
+            <li><a href="https://www.kaggle.com/code/melikaparhiz/persian-g2p-vits-kaggle" target="_blank" rel="noopener">Persian G2P-VITS (Coqui)</a></li>
+            <li><a href="https://www.kaggle.com/code/soroushsoleimani/fine-tuning-f5-tts" target="_blank" rel="noopener">Fine-Tuning F5-TTS</a></li>
+            <li><a href="https://www.kaggle.com/code/soroushsoleimani/f5-tts-architecture-complete-explanation" target="_blank" rel="noopener">F5-TTS Architecture Analysis</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2026 Soroush Soleimani &amp; Melika Parhiz. Open-source research published under the MIT License. Hosted on GitHub Pages.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Unified Minimal Audio Engine Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let currentAudio = null;
+      let currentButton = null;
+      let currentCard = null;
+
+      const playIcons = {
+        play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+        pause: '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
+      };
+
+      const formatTime = (secs) => {
+        if (isNaN(secs)) return '0:00';
+        const m = Math.floor(secs / 60);
+        const s = Math.floor(secs % 60);
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+      };
+
+      const stopCurrent = () => {
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+          if (currentButton) {
+            currentButton.innerHTML = playIcons.play;
+            currentButton.classList.remove('playing');
+          }
+          if (currentCard) {
+            currentCard.classList.remove('playing-bar');
+            const fill = currentCard.querySelector('.progress-fill');
+            if (fill) fill.style.width = '0%';
+            const currTime = currentCard.querySelector('.time-curr');
+            if (currTime) currTime.textContent = '0:00';
+          }
+          currentAudio = null;
+          currentButton = null;
+          currentCard = null;
+        }
+      };
+
+      document.querySelectorAll('.play-btn').forEach(btn => {
+        const audioSrc = btn.getAttribute('data-audio');
+        const row = btn.closest('.player-row');
+        const track = row.querySelector('.progress-track');
+        const fill = row.querySelector('.progress-fill');
+        const timeCurr = row.querySelector('.time-curr');
+        const timeDur = row.querySelector('.time-dur');
+
+        // Pre-create Audio element
+        const audio = new Audio(audioSrc);
+
+        audio.addEventListener('loadedmetadata', () => {
+          if (timeDur) timeDur.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+          if (audio.duration) {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            if (fill) fill.style.width = `${pct}%`;
+            if (timeCurr) timeCurr.textContent = formatTime(audio.currentTime);
+          }
+        });
+
+        audio.addEventListener('ended', () => {
+          btn.innerHTML = playIcons.play;
+          btn.classList.remove('playing');
+          row.classList.remove('playing-bar');
+          if (fill) fill.style.width = '0%';
+          if (timeCurr) timeCurr.textContent = '0:00';
+          currentAudio = null;
+          currentButton = null;
+          currentCard = null;
+        });
+
+        // Click track to seek
+        if (track) {
+          track.addEventListener('click', (e) => {
+            if (currentAudio === audio && audio.duration) {
+              const rect = track.getBoundingClientRect();
+              const pos = (e.clientX - rect.left) / rect.width;
+              audio.currentTime = pos * audio.duration;
+            }
+          });
+        }
+
+        // Click Play/Pause button
+        btn.addEventListener('click', () => {
+          if (currentAudio === audio) {
+            if (audio.paused) {
+              audio.play();
+              btn.innerHTML = playIcons.pause;
+              btn.classList.add('playing');
+              row.classList.add('playing-bar');
+            } else {
+              audio.pause();
+              btn.innerHTML = playIcons.play;
+              btn.classList.remove('playing');
+              row.classList.remove('playing-bar');
+            }
+          } else {
+            stopCurrent();
+            currentAudio = audio;
+            currentButton = btn;
+            currentCard = row;
+
+            audio.play().then(() => {
+              btn.innerHTML = playIcons.pause;
+              btn.classList.add('playing');
+              row.classList.add('playing-bar');
+            }).catch(err => {
+              console.warn('Audio playback error:', err);
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
